@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     const pdfStream = await renderToStream(<InvoiceDocument data={{...data, name, email}} />);
     const title = data.listingTitle || 'invoice';
 
-    return new NextResponse(pdfStream as any, {
+    return new NextResponse(pdfStream as unknown as ReadableStream, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${title.replace(/ /g, '_')}_invoice.pdf"`,
