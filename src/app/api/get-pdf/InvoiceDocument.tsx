@@ -17,11 +17,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 30,
   },
-  logo: {
-    width: 150,
-  },
   headerInfo: {
     textAlign: 'right',
+  },
+  companyName: {
+    fontSize: 18,
+    fontWeight: 300,
+    marginBottom: 10,
+    color: '#F97316',
   },
   companyInfo: {
     flexDirection: 'row',
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 300,
     marginBottom: 4,
   },
@@ -97,19 +100,18 @@ const formatPrice = (price: number) => {
 };
 
 export interface InvoiceData {
-  listingTitle: string;
-  listingDescription: string;
-  sellingPrice: number;
-  address: {
-    state: string;
-  };
-  imageUrls: string[];
-  isPickupAvailable: boolean;
-  secondaryId: string;
-  createdAt: string;
-  name: string;
-  email: string;
-  logo: string;
+    listingTitle: string;
+    listingDescription: string;
+    sellingPrice: number;
+    address: {
+        state: string;
+    };
+    imageUrls: string[];
+    isPickupAvailable: boolean;
+    secondaryId: string;
+    createdAt: string;
+    name: string;
+    email: string;
 }
 
 export const InvoiceDocument = ({ data }: { data: InvoiceData }) => {
@@ -118,20 +120,18 @@ export const InvoiceDocument = ({ data }: { data: InvoiceData }) => {
     listingDescription: description,
     sellingPrice: price,
     address,
-    imageUrls,
     isPickupAvailable,
     secondaryId,
     createdAt,
     name,
-    email,
-    logo
+    email
   } = data;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          {/* <Image style={styles.logo} src={logo} /> */}
+          <Text style={styles.companyName}>Garage</Text>
           <View style={styles.headerInfo}>
             <Text>Invoice #: {secondaryId}</Text>
             <Text>Listing Created: {new Date(createdAt).toLocaleDateString()}</Text>
@@ -152,7 +152,7 @@ export const InvoiceDocument = ({ data }: { data: InvoiceData }) => {
           </View>
         </View>
 
-        <Image style={styles.image} src={imageUrls[0]} />
+        <Image style={styles.image} src={data.imageUrls[0]} />
         <Text style={styles.title}>{title}</Text>
         <Text>Located in {address.state}{isPickupAvailable ? ', pickup available' : ''}</Text>
         <Text style={styles.description}>{description}</Text>
