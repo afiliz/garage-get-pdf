@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { renderToStream } from '@react-pdf/renderer';
-import { InvoiceDocument } from './InvoiceDocument';
+import { InvoiceDocument, InvoiceData } from './InvoiceDocument';
 import React from 'react';
 import fs from 'fs';
 import path from 'path';
@@ -22,18 +22,26 @@ export async function GET(req: NextRequest) {
         console.error('failed to fetch listing data:', errorText);
         return new NextResponse(`failed to fetch listing data: ${res.statusText}`, { status: res.status });
     }
-    const data = await res.json();
+    const data: InvoiceData = await res.json();
 
     // read logo and convert to base64
     const logoPath = path.resolve(process.cwd(), 'public/garage-logo.png');
     const logoBuffer = fs.readFileSync(logoPath);
     const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
 
-    const stream = await renderToStream(<InvoiceDocument data={{...data, name, email, logo: logoBase64}} />);
+    const pdfStream = await renderToStream(<InvoiceDocument data={{...data, name, email, logo: logoBase64}} />);
+
+    const stream = new ReadableStream({
+        start(controller) {
+            pdfStream.on('data', (chunk) => controller.enqueue(chunk));
+            pdfStream.on('end', () => controller.close());
+            pdfStream.on('error', (err) => controller.error(err));
+        },
+    });
 
     const title = data.listingTitle || 'invoice';
 
-    return new NextResponse(stream as any, {
+    return new NextResponse(stream, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${title.replace(/ /g, '_')}_invoice.pdf"`,

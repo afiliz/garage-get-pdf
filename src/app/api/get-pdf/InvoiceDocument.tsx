@@ -96,7 +96,23 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-export const InvoiceDocument = ({ data }: { data: any }) => {
+export interface InvoiceData {
+  listingTitle: string;
+  listingDescription: string;
+  sellingPrice: number;
+  address: {
+    state: string;
+  };
+  imageUrls: string[];
+  isPickupAvailable: boolean;
+  secondaryId: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  logo: string;
+}
+
+export const InvoiceDocument = ({ data }: { data: InvoiceData }) => {
   const {
     listingTitle: title,
     listingDescription: description,
