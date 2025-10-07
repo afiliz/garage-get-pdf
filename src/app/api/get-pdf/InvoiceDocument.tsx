@@ -131,7 +131,7 @@ export const InvoiceDocument = ({ data }: { data: InvoiceData }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Image style={styles.logo} src={logo} />
+          {/* <Image style={styles.logo} src={logo} /> */}
           <View style={styles.headerInfo}>
             <Text>Invoice #: {secondaryId}</Text>
             <Text>Listing Created: {new Date(createdAt).toLocaleDateString()}</Text>

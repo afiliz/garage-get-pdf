@@ -24,12 +24,12 @@ export async function GET(req: NextRequest) {
     }
     const data: InvoiceData = await res.json();
 
-    // read logo and convert to base64
-    const logoPath = path.resolve(process.cwd(), 'public/garage-logo.png');
-    const logoBuffer = fs.readFileSync(logoPath);
-    const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    // // read logo and convert to base64
+    // const logoPath = path.resolve(process.cwd(), 'public/garage-logo.png');
+    // const logoBuffer = fs.readFileSync(logoPath);
+    // const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
 
-    const pdfStream = await renderToStream(<InvoiceDocument data={{...data, name, email, logo: logoBase64}} />);
+    const pdfStream = await renderToStream(<InvoiceDocument data={{...data, name, email}} />);
 
     const stream = new ReadableStream({
         start(controller) {
