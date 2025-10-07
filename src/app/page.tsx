@@ -79,7 +79,7 @@ export default function Home() {
             type="text"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="Paste Garage Fire Truck Listing URL"
+            placeholder="Paste shopgarage.com Listing URL"
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition"
             required
           />
